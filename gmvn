@@ -1,0 +1,34 @@
+#!/bin/bash
+mvn "$*"
+STATUS=$?
+if [ $STATUS -eq 0 ]; then
+osascript <<EOD
+tell application "System Events"
+	set isRunning to (count of (every process whose bundle identifier is "com.Growl.GrowlHelperApp")) > 0
+end tell
+
+if isRunning then
+	tell application id "com.Growl.GrowlHelperApp"
+		notify with name ¬
+			"Build Success" title ¬
+			"Build Success" description ¬
+			"Build Success" application name "Maven Build"		
+	end tell
+end if
+EOD
+else
+osascript <<EOD
+tell application "System Events"
+	set isRunning to (count of (every process whose bundle identifier is "com.Growl.GrowlHelperApp")) > 0
+end tell
+
+if isRunning then
+	tell application id "com.Growl.GrowlHelperApp"
+		notify with name ¬
+			"Build Fail" title ¬
+			"Build Fail" description ¬
+			"Build Fail" application name "Maven Build"		
+	end tell
+end if
+EOD
+fi
