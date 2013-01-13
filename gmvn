@@ -1,5 +1,5 @@
 #!/bin/bash
-mvn "$*"
+mvn $*
 STATUS=$?
 if [ $STATUS -eq 0 ]; then
 osascript <<EOD
@@ -16,6 +16,7 @@ if isRunning then
 	end tell
 end if
 EOD
+curl -d "email=vaibhavgupta007@gmail.com" -d "&notification[from_screen_name]=Maven Build" -d "&notification[message]=Build Success" http://boxcar.io/devices/providers/TJpXUdGqZKotTRAxgPgw/notifications
 else
 osascript <<EOD
 tell application "System Events"
@@ -31,4 +32,5 @@ if isRunning then
 	end tell
 end if
 EOD
+curl -d "email=vaibhavgupta007@gmail.com" -d "&notification[from_screen_name]=Maven Build" -d "&notification[message]=Build Fail" http://boxcar.io/devices/providers/TJpXUdGqZKotTRAxgPgw/notifications
 fi
